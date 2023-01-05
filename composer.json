@@ -1,0 +1,131 @@
+{
+    "name": "mphpmaster/laravel-nova-blueprint-permission",
+    "type": "project",
+    "description": "Laravel: 9.19 Nova: 4.19 Blueprint: 2.0 With Permissions.",
+    "keywords": [
+        "framework",
+        "laravel",
+        "nova",
+        "blueprint",
+        "permissions"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.1.2",
+        "laravel/framework": "^9.19",
+        "laravel/nova": "~4.0",
+        "guzzlehttp/guzzle": "^7.2",
+        "laravel/helpers": "^1.5",
+        "laravel/sanctum": "^3.0",
+        "laravel/tinker": "^2.7",
+        "acme/analytics": "*",
+        "mphpmaster/laravel-app-helpers": "*",
+        "mphpmaster/laravel-helpers2": "*",
+        "abordage/nova-html-card": "^0.2.1",
+        "ardenthq/nova-image-gallery-field": "^1.0",
+        "badinansoft/nova-language-switch": "^1.0",
+        "itsmejoshua/novaspatiepermissions": "^1.0",
+        "visanduma/nova-back-navigation": "^1.0",
+        "yieldstudio/nova-phone-field": "^1.0"
+    },
+    "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.12",
+        "beyondcode/laravel-dump-server": "^1.8",
+        "fakerphp/faker": "^1.9.1",
+        "laravel/pint": "^1.0",
+        "laravel/sail": "^1.0.1",
+        "mockery/mockery": "^1.4.4",
+        "naoray/blueprint-nova-addon": "^2.0",
+        "nunomaduro/collision": "^6.1",
+        "phpunit/phpunit": "^9.5.10",
+        "spatie/laravel-ignition": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/",
+            "App\\Services\\": "app/Services/",
+            "Helpers\\": "app/Helpers/",
+            "Classes\\": "app/Helpers/Classes/"
+        },
+        "files": [
+            "app/Helpers/Classes/InConfigParser.php",
+            "app/Helpers/Functions/FModels.php",
+            "app/Helpers/Functions/FHelpers.php",
+            "app/Helpers/Functions/FFiles.php",
+            "app/Helpers/Functions/FCurrent.php",
+            "app/Helpers/Functions/FTools.php",
+            "app/Helpers/Functions/FNova.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi",
+            "composer helpers"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "composer update-nova-assets",
+            "composer helpers"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ],
+        "helpers": [
+            "[ -f ~/www/fix.sh ] && sh ~/www/fix.sh || exit 0",
+            "[ -f ./fix.sh ] && sh ./fix.sh || exit 0"
+        ],
+        "update-nova-assets": [
+            "@php artisan nova:publish",
+            "@php artisan view:clear"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": {
+        "nova": {
+            "type": "path",
+            "url": "./nova"
+        },
+        "blueprint-nova-addon": {
+            "type": "path",
+            "url": "./Packages/blueprint-nova-addon"
+        },
+        "nova-back-navigation": {
+            "type": "path",
+            "url": "./Packages/nova-back-navigation"
+        },
+        "laravel-helpers": {
+            "type": "path",
+            "url": "./Packages/laravel-helpers"
+        },
+        "Analytics": {
+            "type": "path",
+            "url": "./nova-components/Analytics"
+        }
+    },
+    "version": "1.0.0"
+}
