@@ -3,6 +3,12 @@
 - nova 4.10.0 (Silver Surfer)
 - blueprint supports nova
 
+### Installation:
+Composer command:
+```shell
+composer create-project mphpmaster/laravel-nova-blueprint-permission
+```
+
 ### Config:
 - run fresh setup:
 ```shell
