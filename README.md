@@ -2,7 +2,7 @@
 - laravel 9.42.2
 - nova 4.10.0 (Silver Surfer)
 - blueprint supports nova
-- 
+
 ### Config:
 - run fresh setup:
 ```shell
