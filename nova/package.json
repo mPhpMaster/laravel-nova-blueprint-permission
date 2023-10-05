@@ -26,7 +26,7 @@
     "jest": "^27.4.7",
     "laravel-mix": "^6.0.41",
     "lodash": "^4.17.21",
-    "postcss": "^8.4.5",
+    "postcss": "^8.4.31",
     "postcss-import": "^14.0.2",
     "postcss-rtlcss": "^3.6.3",
     "prettier": "^2.5.1",
