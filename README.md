@@ -1,6 +1,6 @@
 ### Laravel ready to go
 - laravel 9.42.2
-- nova 4.10.0 (Silver Surfer)
+- nova 4.24.2 (Silver Surfer)
 - blueprint supports nova
 
 ### Installation:
