@@ -6,7 +6,7 @@
 ### Installation:
 Composer command:
 ```shell
-composer create-project mphpmaster/laravel-nova-blueprint-permission
+git clone https://github.com/mPhpMaster/laravel-nova-blueprint-permission.git -b l9n2242
 ```
 
 ### Config:
