@@ -17,7 +17,7 @@ return [
          */
 
         'permission' => \App\Models\Permission::class,
-        // 'permission' => Spatie\Permission\Models\Permission::class,
+//         'permission' => Spatie\Permission\Models\Permission::class,
 
         /*
          * When using the "HasRoles" trait from this package, we need to know which
@@ -29,7 +29,8 @@ return [
          */
 
         'role' => \App\Models\Role::class,
-        // 'role' => Spatie\Permission\Models\Role::class,
+//         'role' => Spatie\Permission\Models\Role::class,
+//         'role' => Sereny\NovaPermissions\Models\Role::class,
 
     ],
 
@@ -168,6 +169,8 @@ return [
         'name' => 'Admin',
         'password' => 'Admin@123',
         'email' => 'admin@app.com',
+        'role'           => IRole::SuperAdminRole,
+        'remember_token' => 'sfdsggbesr',
         'email_verified_at' => now(),
     ],
 
@@ -179,6 +182,7 @@ return [
 
     'roles' => [
         $superAdminRole,
+        InConfigParser::roleOf(IRole::UserRole),
         // InConfigParser::roleOf(IRole::AdminRole, "user"),
         // InConfigParser::roleOf(IRole::ProjectManagerRole, "user"),
         // InConfigParser::roleOf(IRole::SettlementAndReconciliationRole, "user"),
@@ -191,9 +195,9 @@ return [
     ],
 
     'permissions' => [
-        ...InConfigParser::permissionsOf("role"),
-        ...InConfigParser::permissionsOf("permission"),
-        ...InConfigParser::permissionsOf("user"),
+//        ...InConfigParser::permissionsOf("role"),
+//        ...InConfigParser::permissionsOf("permission"),
+//        ...InConfigParser::permissionsOf("user"),
 
         // [ 'name' => 'role.index', 'group' => 'system', 'guard_name' => 'web' ],
         // [ 'name' => 'role.view_any', 'group' => 'system', 'guard_name' => 'web' ],
@@ -221,5 +225,39 @@ return [
         // [ 'name' => 'user.delete', 'group' => 'system', 'guard_name' => 'web' ],
         // [ 'name' => 'user.restore', 'group' => 'system', 'guard_name' => 'web' ],
         // [ 'name' => 'user.force_delete', 'group' => 'system', 'guard_name' => 'web' ],
+    ],
+
+    /**
+     * permissions name map used in controller
+     */
+    'resource_ability_map'            => [
+	    'viewAny' => 'viewAny',
+	    'index'   => 'viewAny',
+
+	    'view' => 'view',
+	    'show' => 'view',
+
+	    'create' => 'create',
+	    'store'  => 'create',
+
+	    'update' => 'update',
+	    'edit'   => 'update',
+
+	    'delete'  => 'delete',
+	    'destroy' => 'delete',
+
+	    'forceDelete'  => 'forceDelete',
+	    'forceDestroy' => 'forceDelete',
+
+	    'restore' => 'restore',
+    ],
+
+    /**
+     * controller methods that doesn't require model used in controller
+     */
+    'resource_methods_without_models' => [
+	    'index',
+	    'create',
+	    'store',
     ],
 ];

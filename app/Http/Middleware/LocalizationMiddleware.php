@@ -20,14 +20,9 @@ class LocalizationMiddleware
     public function handle($request, Closure $next)
     {
         $headerLang = trim(request()->header('Accept-Language') ?? getDefaultLocale());
-        $headerLang = isLocaleAllowed($headerLang) ? $headerLang : null;
-        // app()->setLocale($headerLang);
+        $headerLang = isLocaleAllowed($headerLang) ? $headerLang : getDefaultLocale('ar');
         setCurrentLocale($headerLang);
 
-        // $headerLang = trim(request()->header('Accept-Language') ?? getDefaultLocale());
-        // $headerLang = array_key_exists($headerLang, config("app.available_locales")) ? $headerLang : getDefaultLocale('en');
-        // app()->setLocale($headerLang);
-        // setCurrentLocale($headerLang);
 
         return $next($request);
     }

@@ -1,13 +1,21 @@
 <?php
 
+use App\Interfaces\IRole;
+
 return [
-    'plural' => 'مجموعات الصلاحيات',
-    'singular' => 'مجموعة الصلاحيات',
-    'fields' => [
-        'name' => 'اسم',
-        'guard_name' => 'اسم الحارس',
-        'permissions' => 'أذونات',
-        'users' => 'المستخدمين',
-    ],
-    // 'import' => 'استيراد مجموعات الصلاحيات',
+	'role'     => 'وظيفة',
+	'roles'    => 'وظائف',
+	'singular' => 'الوظيفة',
+	'plural'   => 'الوظائف',
+	'fields'   => [
+		'name'        => 'اسم',
+		'guard_name'  => 'اسم الحارس',
+		'permissions' => 'الصلاحيات',
+		'users'       => 'المستخدمين',
+
+//		IRole::AdminRole      => 'مدير',
+//		IRole::SupervisorRole => 'مشرف',
+//		IRole::ForemanRole    => 'مراقب',
+//		IRole::EmployeeRole   => 'موظف',
+	]
 ];

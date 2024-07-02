@@ -314,3 +314,95 @@ if( !function_exists('isPermissionExists') ) {
         return !empty($permission);
     }
 }
+
+if(!function_exists('getDefaultDateTimeFormat')) {
+	/**
+	 * @return string
+	 */
+	function getDefaultDateTimeFormat(): string
+	{
+		return (string) config('app.datetime_format');
+	}
+}
+
+if(!function_exists('getDefaultTimeFormat')) {
+	/**
+	 * @return string
+	 */
+	function getDefaultTimeFormat(): string
+	{
+		return (string) config('app.time_format');
+	}
+}
+
+if(!function_exists('getDefaultDateFormat')) {
+	/**
+	 * @return string
+	 */
+	function getDefaultDateFormat(): string
+	{
+		return (string) config('app.date_format');
+	}
+}
+
+if(!function_exists('formatDateTime')) {
+	/**
+	 * @param \Illuminate\Support\Carbon|\DateTimeInterface|mixed $d
+	 * @param string|null                                         $format
+	 *
+	 * @return mixed|string
+	 */
+	function formatDateTime($d, ?string $format = null)
+	{
+		$format = $format ?? getDefaultDateTimeFormat();
+
+		$isCarbon = ($d instanceof \Illuminate\Support\Carbon);
+		$isDateTime = ($d instanceof \DateTimeInterface);
+
+		if($isCarbon || $isDateTime) {
+			$d = config('app.timezone') ? $d->setTimezone(new \DateTimeZone(config('app.timezone'))) : $d;
+
+			$d->locale('en');
+
+			if($isCarbon) {
+				return $d->translatedFormat($format);
+			}
+
+			if($isDateTime) {
+				return $d->format($format);
+			}
+		}
+
+		return '';
+	}
+}
+
+if(!function_exists('formatDateTimeWithDiff')) {
+	/**
+	 * @param \Illuminate\Support\Carbon|\DateTimeInterface|mixed $d
+	 * @param string|null                                         $format
+	 *
+	 * @return mixed|string
+	 */
+	function formatDateTimeWithDiff($d, ?string $format = null)
+	{
+		$format = $format ?? getDefaultDateTimeFormat();
+
+		$isCarbon = ($d instanceof \Illuminate\Support\Carbon);
+		$isDateTime = ($d instanceof \DateTimeInterface);
+
+		if($isCarbon || $isDateTime) {
+			$d = config('app.timezone') ? $d->setTimezone('UTC') : $d;
+
+			if($isCarbon) {
+				return $d->translatedFormat($format).' ('.$d->longRelativeToOtherDiffForHumans().')';
+			}
+
+			if($isDateTime) {
+				return $d->format($format).' ('.$d->longRelativeToOtherDiffForHumans().')';
+			}
+		}
+
+		return '';
+	}
+}

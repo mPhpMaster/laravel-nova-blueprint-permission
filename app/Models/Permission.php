@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Scopes\Searchable;
 use App\Traits\THasScopeName;
+use App\Traits\TModelTranslation;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,9 +21,11 @@ class Permission extends \Spatie\Permission\Models\Permission
 {
     use HasFactory;
     use Searchable;
+	use TModelTranslation;
     use SoftDeletes;
     use THasScopeName;
     use RefreshesPermissionCache;
+	use \App\Traits\THasPermissionGroup;
 
     protected $fillable = [
         'name',

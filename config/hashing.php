@@ -49,4 +49,8 @@ return [
         'time' => 4,
     ],
 
+    'tdes-cipher' => [
+        'key' => 'ABCDEFGHIJKLMNOPQRSTUVWX',
+        'iv' => '12345678',
+    ],
 ];

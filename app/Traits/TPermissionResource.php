@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use Classes\Override;
+use App\Helpers\Classes\Override;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Fields\ID;

@@ -4,13 +4,14 @@ namespace App\Nova;
 
 use App\Models\Permission as MODEL;
 use App\Traits\TPermissionResource;
+use App\Traits\TRoleResource;
 
 /**
  *
  */
 class Permission extends Resource
 {
-    use TPermissionResource;
+	use TRoleResource;
 
     /**
      * The model the resource corresponds to.

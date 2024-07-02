@@ -1,5 +1,12 @@
 <?php
 
+use Laravel\Nova\Asset;
+use Laravel\Nova\Fields\Field;
+use Laravel\Nova\Fields\FormData;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Style;
+
 if( !function_exists('isRequestNovaIndex') ) {
     function isRequestNovaIndex(\Illuminate\Http\Request $request): bool
     {
@@ -217,6 +224,62 @@ if( !function_exists('getNovaResourceInfoFromRequest') ) {
     }
 }
 
+if(!function_exists('NovaStatusField')) {
+	/**
+	 * @param array $options
+	 *
+	 * @return \Laravel\Nova\Fields\Select
+	 */
+	function NovaStatusField(
+		array $config = [
+			'name'          => null,
+			'attribute'     => null,
+			'trans'         => null,
+			'options'       => null,
+			'options_trans' => null,
+			'default'       => STATUS_ACTIVE,
+		]
+	): Select
+	{
+		$config['options_trans'] ??= $config['trans'] ?? null;
+
+		[
+			'name'          => $name,
+			'attribute'     => $attribute,
+			'trans'         => $trans,
+			'options_trans' => $options_trans,
+			'options'       => $options,
+			'default'       => $default,
+		] = $config;
+
+		/** @var string $attribute */
+		$attribute = value($attribute ?: $name);
+
+		/** @var \Closure $trans */
+		$trans = $trans && (isClosure($trans) || is_callable($trans)) ?
+			$trans :
+			(fn(...$a) => $a[0] ?? $a [1] ?? null);
+		/** @var \Closure $options_trans */
+		$options_trans = $options_trans && (isClosure($options_trans) || is_callable($options_trans)) ?
+			$options_trans : (
+			$trans ?: (fn(...$a) => $a[0] ?? $a [1] ?? null)
+			);
+
+		$options = $options ?: $options_trans(str_plural(snake_case($attribute)));
+		/** @var array $options */
+		$options = array_wrap(is_string($options) ? $options_trans($options) : $options);
+
+		/** @var (\Closure(\Laravel\Nova\Http\Requests\NovaRequest):mixed)|mixed $default */
+		$default = value($default) ?: STATUS_ACTIVE;
+
+		return Select::make($trans($name), $attribute)
+			->options(fn() => $options)
+			->default(fn() => $default)
+			->sortable()
+			->displayUsingLabels();
+	}
+}
+
 if( !function_exists('getNovaRequestParameters') ) {
     /**
      * @param \Illuminate\Http\Request|null $request
@@ -413,5 +476,74 @@ if( !function_exists('HiddenField') ) {
     function HiddenField($attribute, $value = null)
     {
         return \Laravel\Nova\Fields\Hidden::make($attribute = value($attribute), $attribute)->withMeta([ 'value' => value($value) ]);
+    }
+}
+
+if( !function_exists('IDNovaField') ) {
+    /**
+     * @param string $name
+     * @param string $attribute
+     *
+     * @return \Laravel\Nova\Fields\ID
+     */
+    function IDNovaField($name, $attribute = 'id'): \Laravel\Nova\Fields\ID
+    {
+        return \Laravel\Nova\Fields\ID::make(...func_get_args())
+                                      ->sortable()/*->hideFromIndex()*/ ;
+    }
+}
+
+if( !function_exists('dependsOn') ) {
+    /**
+     * @param string        $key
+     * @param mixed|null    $value
+     * @param \Closure|null $pipe
+     *
+     * @return array
+     */
+    function dependsOn(string|array $key, mixed $value = null, ?\Closure $pipe = null): array
+    {
+        if( is_array($key) ) {
+            [ $key => $value ] = $key;
+        }
+
+        $pipe ??= value(...);
+
+        return [
+            'type',
+            function(Field $field, NovaRequest $request, FormData $formData) use ($pipe, $key, $value) {
+                if( in_array($value, [
+                    $formData->get($key),
+                    $request->get($key),
+                ]) ) {
+                    $pipe($field->show());
+                }
+            },
+        ];
+    }
+}
+
+if( !function_exists('getResourceAsset') ) {
+    /**
+    * @param string $name
+    * @param string $dir
+    * @param string $ext
+    * @param string|\Laravel\Nova\Asset $type
+    *
+    * @return \Laravel\Nova\Asset
+     */
+    function getResourceAsset(string $name,string $dir,string $ext, string|Asset $type = Style::class): Asset {
+        $dirs = explode("/", trim($dir));
+        $label = array_pop($dirs);
+        $dir = implode("/", $dirs);
+        $dir = ($dir = trim($dir)) === '-' || empty($dir) ? "" : $dir . "/";
+        $ext = ($ext = trim($ext)) === '-' ? "" : "." . $ext;
+        $name2 = ($dir . $label . "/") . $name . $ext;
+        $name = $dir . $name . $ext;
+        $name = file_exists(resource_path($name2)) ? $name2 : $name;
+
+        abort_unless(file_exists(resource_path($name)), 404);
+
+        return $type::make($label ?: basename($name), resource_path($name));
     }
 }

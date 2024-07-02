@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -44,7 +45,10 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
+        $this->reportable(function (PermissionDoesNotExist $e) {
+            //
+        });
+        $this->renderable(function (PermissionDoesNotExist $e) {
             //
         });
     }
@@ -53,16 +57,16 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param  \Exception  $e
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $e)
     {
-        if ($exception instanceof \Illuminate\Validation\ValidationException) {
+        if ($e instanceof \Illuminate\Validation\ValidationException) {
             // return response()->json([
             //                             'message' => $exception->getMessage(),
             //                         ], 401);
         }
-        return parent::render($request, $exception);
+        return parent::render($request, $e);
     }
 }

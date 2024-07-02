@@ -30,13 +30,18 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         // Nova::withoutThemeSwitcher();
         Nova::serving(function(ServingNova $event) {
             Nova::translations(lang_path("vendor/nova/" . app()->getLocale() . ".json"));
+	        // loading custom files
+	        // Nova::script('js-helpers', resource_path("js/helpers.js"));
+	        // Nova::style('css-helpers', resource_path("css/helpers.css"));
         });
 
-        static::bootMenu($this);
+	    static::bootMenu($this);
         static::bootUserMenu($this);
         static::bootFooter($this);
 
         // Nova::enableRTL();
+
+//	    Nova::resourcesIn(app_path("Nova"));
     }
 
     /**
@@ -64,7 +69,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         Gate::define('viewNova', function($user) {
             return isDeveloperMode() || in_array($user->email, [
                     'admin@app.com',
-                ]);
+                ]) || $user?->isAnyAdmin();
         });
     }
 
@@ -88,11 +93,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function tools()
     {
         return [
-            new \Badinansoft\LanguageSwitch\LanguageSwitch(),
+	        \Badinansoft\LanguageSwitch\LanguageSwitch::make(),
 
-            new \Visanduma\NovaBackNavigation\NovaBackNavigation(),
-
-            // \Itsmejoshua\Novaspatiepermissions\Novaspatiepermissions::make(),
+            \Packages\NovaPermissions\NovaPermissions::make(),
         ];
     }
 
@@ -103,14 +106,17 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     public function register()
     {
-        //
+//	    Nova::initialPath('to-dashboard');
+//	    Nova::footer(fn() => '');
     }
 
     public static function bootMenu(?ServiceProvider $provider = null)
     {
-        if( $provider->app->getLocale() === 'ar' ) {
-            Nova::enableRTL();
-        }
+	    Nova::enableRTL(fn() => currentLocale() === 'ar');
+	    Nova::withBreadcrumbs(fn() => auth()->check());
+	    Nova::sortResourcesBy(function($resource) {
+		    return $resource::$priority ?? 9999;
+	    });
 
         // Nova::mainMenu(fn(Request $request) => [
         //     MenuSection::dashboard(Main::class)->icon('chart-bar'),

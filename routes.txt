@@ -1,0 +1,143 @@
+/bin/php -d memory_limit=-1 artisan route:list --no-ansi
+
+  GET|HEAD        / ............................................................................................. nova.pages.home › Laravel\Nova\Http\Controllers\Pages\HomeController
+  GET|HEAD        403 ........................................................................................ nova.pages.403 › Laravel\Nova\Http\Controllers\Pages\Error403Controller
+  GET|HEAD        404 ........................................................................................ nova.pages.404 › Laravel\Nova\Http\Controllers\Pages\Error404Controller
+  GET|HEAD        _/scripts/{ext}/{name}/{dir} ....................................................................................................................................... 
+  GET|HEAD        _/styles/{ext}/{name}/{dir} ........................................................................................................................................ 
+  POST            _ignition/execute-solution ........................................................... ignition.executeSolution › Spatie\LaravelIgnition › ExecuteSolutionController
+  GET|HEAD        _ignition/health-check ....................................................................... ignition.healthCheck › Spatie\LaravelIgnition › HealthCheckController
+  POST            _ignition/update-config .................................................................... ignition.updateConfig › Spatie\LaravelIgnition › UpdateConfigController
+  POST            api/v1/account/change_password ............................................................................ auth.change_password › Api\AuthController@changePassword
+  POST            api/v1/login ...................................................................................................................... login › Api\AuthController@login
+  POST            api/v1/logout .............................................................................................................. auth.logout › Api\AuthController@logout
+  GET|HEAD        api/v1/permissions .............................................................................................. permissions.index › Api\PermissionController@index
+  POST            api/v1/permissions .............................................................................................. permissions.store › Api\PermissionController@store
+  GET|HEAD        api/v1/permissions/{permission} ................................................................................... permissions.show › Api\PermissionController@show
+  PUT|PATCH       api/v1/permissions/{permission} ............................................................................... permissions.update › Api\PermissionController@update
+  DELETE          api/v1/permissions/{permission} ............................................................................. permissions.destroy › Api\PermissionController@destroy
+  DELETE          api/v1/permissions/{permission}/force ............................................................. permissions.force_delete › Api\PermissionController@forceDestroy
+  POST            api/v1/permissions/{permission}/restore ..................................................................... permissions.restore › Api\PermissionController@restore
+  PUT             api/v1/profile .............................................................................................. auth.update_profile › Api\AuthController@updateProfile
+  GET|HEAD        api/v1/roles ................................................................................................................ roles.index › Api\RoleController@index
+  POST            api/v1/roles ................................................................................................................ roles.store › Api\RoleController@store
+  GET|HEAD        api/v1/roles/{role} ........................................................................................................... roles.show › Api\RoleController@show
+  PUT|PATCH       api/v1/roles/{role} ....................................................................................................... roles.update › Api\RoleController@update
+  DELETE          api/v1/roles/{role} ..................................................................................................... roles.destroy › Api\RoleController@destroy
+  DELETE          api/v1/roles/{role}/force ..................................................................................... roles.force_delete › Api\RoleController@forceDestroy
+  POST            api/v1/roles/{role}/restore ............................................................................................. roles.restore › Api\RoleController@restore
+  GET|HEAD        api/v1/user ..................................................................................................... auth.current_user › Api\AuthController@currentUser
+  GET|HEAD        api/v1/users ................................................................................................................ users.index › Api\UserController@index
+  POST            api/v1/users ................................................................................................................ users.store › Api\UserController@store
+  GET|HEAD        api/v1/users/{user} ........................................................................................................... users.show › Api\UserController@show
+  PUT|PATCH       api/v1/users/{user} ....................................................................................................... users.update › Api\UserController@update
+  DELETE          api/v1/users/{user} ..................................................................................................... users.destroy › Api\UserController@destroy
+  DELETE          api/v1/users/{user}/force ..................................................................................... users.force_delete › Api\UserController@forceDestroy
+  POST            api/v1/users/{user}/restore ............................................................................................. users.restore › Api\UserController@restore
+  GET|HEAD        change-language .................................................................................................................................................... 
+  ANY             dashboard ........................................................................................... nova.pages.dashboard › Illuminate\Routing › RedirectController
+  GET|HEAD        dashboards/{name} ............................................................ nova.pages.dashboard.custom › Laravel\Nova\Http\Controllers\Pages\DashboardController
+  GET|HEAD        home ................................................................................................................................... home › HomeController@index
+  GET|HEAD        login ................................................................................................................... login › Auth\LoginController@showLoginForm
+  POST            login ................................................................................................................................... Auth\LoginController@login
+  POST            logout ........................................................................................................................ logout › Auth\LoginController@logout
+  GET|HEAD        nova-api/dashboards/cards/{dashboard} ............................................................ nova.api. › Laravel\Nova\Http\Controllers\DashboardCardController
+  GET|HEAD        nova-api/dashboards/{dashboard} ...................................................................... nova.api. › Laravel\Nova\Http\Controllers\DashboardController
+  POST            nova-api/impersonate ............................................................ nova.api. › Laravel\Nova\Http\Controllers\ImpersonateController@startImpersonating
+  DELETE          nova-api/impersonate ............................................................. nova.api. › Laravel\Nova\Http\Controllers\ImpersonateController@stopImpersonating
+  POST            nova-api/license-check ........................................................................................................................ license-check-4-nova
+  GET|HEAD        nova-api/metrics/{metric} ...................................................................... nova.api. › Laravel\Nova\Http\Controllers\DashboardMetricController
+  GET|HEAD        nova-api/nova-notifications .................................................................. nova.api. › Laravel\Nova\Http\Controllers\NotificationIndexController
+  DELETE          nova-api/nova-notifications/delete-all ................................................... nova.api. › Laravel\Nova\Http\Controllers\NotificationDeleteAllController
+  POST            nova-api/nova-notifications/read-all ....................................................... nova.api. › Laravel\Nova\Http\Controllers\NotificationReadAllController
+  DELETE          nova-api/nova-notifications/{notification}/delete ........................................... nova.api. › Laravel\Nova\Http\Controllers\NotificationDeleteController
+  POST            nova-api/nova-notifications/{notification}/read ............................................... nova.api. › Laravel\Nova\Http\Controllers\NotificationReadController
+  GET|HEAD        nova-api/scripts/{script} ............................................................................... nova.api. › Laravel\Nova\Http\Controllers\ScriptController
+  GET|HEAD        nova-api/search ......................................................................................... nova.api. › Laravel\Nova\Http\Controllers\SearchController
+  GET|HEAD        nova-api/styles/{style} .................................................................................. nova.api. › Laravel\Nova\Http\Controllers\StyleController
+  GET|HEAD        nova-api/{resource} .............................................................................. nova.api. › Laravel\Nova\Http\Controllers\ResourceIndexController
+  POST            nova-api/{resource} .............................................................................. nova.api. › Laravel\Nova\Http\Controllers\ResourceStoreController
+  DELETE          nova-api/{resource} ............................................................................ nova.api. › Laravel\Nova\Http\Controllers\ResourceDestroyController
+  POST            nova-api/{resource}/action ........................................................................ nova.api. › Laravel\Nova\Http\Controllers\ActionController@store
+  PATCH           nova-api/{resource}/action ......................................................................... nova.api. › Laravel\Nova\Http\Controllers\ActionController@sync
+  GET|HEAD        nova-api/{resource}/actions ....................................................................... nova.api. › Laravel\Nova\Http\Controllers\ActionController@index
+  GET|HEAD        nova-api/{resource}/associatable/{field} .......................................................... nova.api. › Laravel\Nova\Http\Controllers\AssociatableController
+  GET|HEAD        nova-api/{resource}/cards ................................................................................. nova.api. › Laravel\Nova\Http\Controllers\CardController
+  GET|HEAD        nova-api/{resource}/count ........................................................................ nova.api. › Laravel\Nova\Http\Controllers\ResourceCountController
+  GET|HEAD        nova-api/{resource}/creation-fields .............................................................. nova.api. › Laravel\Nova\Http\Controllers\CreationFieldController
+  PATCH           nova-api/{resource}/creation-fields .......................................................... nova.api. › Laravel\Nova\Http\Controllers\CreationFieldSyncController
+  DELETE          nova-api/{resource}/detach ...................................................................... nova.api. › Laravel\Nova\Http\Controllers\ResourceDetachController
+  POST            nova-api/{resource}/field-attachment/{field} ............................................. nova.api. › Laravel\Nova\Http\Controllers\FieldAttachmentController@store
+  DELETE          nova-api/{resource}/field-attachment/{field} ................................. nova.api. › Laravel\Nova\Http\Controllers\FieldAttachmentController@destroyAttachment
+  GET|HEAD        nova-api/{resource}/field-attachment/{field}/draftId ................................... nova.api. › Laravel\Nova\Http\Controllers\FieldAttachmentController@draftId
+  DELETE          nova-api/{resource}/field-attachment/{field}/{draftId} .......................... nova.api. › Laravel\Nova\Http\Controllers\FieldAttachmentController@destroyPending
+  GET|HEAD        nova-api/{resource}/field/{field} ........................................................................ nova.api. › Laravel\Nova\Http\Controllers\FieldController
+  POST            nova-api/{resource}/field/{field}/preview ......................................................... nova.api. › Laravel\Nova\Http\Controllers\FieldPreviewController
+  GET|HEAD        nova-api/{resource}/filters ............................................................................. nova.api. › Laravel\Nova\Http\Controllers\FilterController
+  DELETE          nova-api/{resource}/force .................................................................. nova.api. › Laravel\Nova\Http\Controllers\ResourceForceDeleteController
+  GET|HEAD        nova-api/{resource}/lens/{lens} ...................................................................... nova.api. › Laravel\Nova\Http\Controllers\LensController@show
+  DELETE          nova-api/{resource}/lens/{lens} ............................................................ nova.api. › Laravel\Nova\Http\Controllers\LensResourceDestroyController
+  POST            nova-api/{resource}/lens/{lens}/action ........................................................ nova.api. › Laravel\Nova\Http\Controllers\LensActionController@store
+  PATCH           nova-api/{resource}/lens/{lens}/action ......................................................... nova.api. › Laravel\Nova\Http\Controllers\LensActionController@sync
+  GET|HEAD        nova-api/{resource}/lens/{lens}/actions ....................................................... nova.api. › Laravel\Nova\Http\Controllers\LensActionController@index
+  GET|HEAD        nova-api/{resource}/lens/{lens}/cards ................................................................. nova.api. › Laravel\Nova\Http\Controllers\LensCardController
+  GET|HEAD        nova-api/{resource}/lens/{lens}/count ........................................................ nova.api. › Laravel\Nova\Http\Controllers\LensResourceCountController
+  GET|HEAD        nova-api/{resource}/lens/{lens}/filters ....................................................... nova.api. › Laravel\Nova\Http\Controllers\LensFilterController@index
+  DELETE          nova-api/{resource}/lens/{lens}/force .................................................. nova.api. › Laravel\Nova\Http\Controllers\LensResourceForceDeleteController
+  GET|HEAD        nova-api/{resource}/lens/{lens}/metrics ....................................................... nova.api. › Laravel\Nova\Http\Controllers\LensMetricController@index
+  GET|HEAD        nova-api/{resource}/lens/{lens}/metrics/{metric} ............................................... nova.api. › Laravel\Nova\Http\Controllers\LensMetricController@show
+  PUT             nova-api/{resource}/lens/{lens}/restore .................................................... nova.api. › Laravel\Nova\Http\Controllers\LensResourceRestoreController
+  GET|HEAD        nova-api/{resource}/lenses .......................................................................... nova.api. › Laravel\Nova\Http\Controllers\LensController@index
+  GET|HEAD        nova-api/{resource}/metrics ....................................................................... nova.api. › Laravel\Nova\Http\Controllers\MetricController@index
+  GET|HEAD        nova-api/{resource}/metrics/{metric} ............................................................... nova.api. › Laravel\Nova\Http\Controllers\MetricController@show
+  GET|HEAD        nova-api/{resource}/morphable/{field} ................................................................ nova.api. › Laravel\Nova\Http\Controllers\MorphableController
+  GET|HEAD        nova-api/{resource}/relate-authorization ................................................ nova.api. › Laravel\Nova\Http\Controllers\RelatableAuthorizationController
+  PUT             nova-api/{resource}/restore .................................................................... nova.api. › Laravel\Nova\Http\Controllers\ResourceRestoreController
+  GET|HEAD        nova-api/{resource}/search ...................................................................... nova.api. › Laravel\Nova\Http\Controllers\ResourceSearchController
+  GET|HEAD        nova-api/{resource}/soft-deletes .............................................................. nova.api. › Laravel\Nova\Http\Controllers\SoftDeleteStatusController
+  GET|HEAD        nova-api/{resource}/{resourceId} .................................................................. nova.api. › Laravel\Nova\Http\Controllers\ResourceShowController
+  PUT             nova-api/{resource}/{resourceId} ................................................................ nova.api. › Laravel\Nova\Http\Controllers\ResourceUpdateController
+  POST            nova-api/{resource}/{resourceId}/attach-morphed/{relatedResource} ........................ nova.api. › Laravel\Nova\Http\Controllers\MorphedResourceAttachController
+  POST            nova-api/{resource}/{resourceId}/attach/{relatedResource} ....................................... nova.api. › Laravel\Nova\Http\Controllers\ResourceAttachController
+  GET|HEAD        nova-api/{resource}/{resourceId}/attachable/{field} ................................................. nova.api. › Laravel\Nova\Http\Controllers\AttachableController
+  GET|HEAD        nova-api/{resource}/{resourceId}/creation-pivot-fields/{relatedResource} .................... nova.api. › Laravel\Nova\Http\Controllers\CreationPivotFieldController
+  PATCH           nova-api/{resource}/{resourceId}/creation-pivot-fields/{relatedResource} ............... nova.api. › Laravel\Nova\Http\Controllers\CreationPivotFieldController@sync
+  GET|HEAD        nova-api/{resource}/{resourceId}/download/{field} ................................................ nova.api. › Laravel\Nova\Http\Controllers\FieldDownloadController
+  DELETE          nova-api/{resource}/{resourceId}/field/{field} .................................................... nova.api. › Laravel\Nova\Http\Controllers\FieldDestroyController
+  GET|HEAD        nova-api/{resource}/{resourceId}/metrics/{metric} ................................................. nova.api. › Laravel\Nova\Http\Controllers\DetailMetricController
+  GET|HEAD        nova-api/{resource}/{resourceId}/peek ............................................................. nova.api. › Laravel\Nova\Http\Controllers\ResourcePeekController
+  GET|HEAD        nova-api/{resource}/{resourceId}/preview ....................................................... nova.api. › Laravel\Nova\Http\Controllers\ResourcePreviewController
+  POST            nova-api/{resource}/{resourceId}/update-attached/{relatedResource}/{relatedResourceId} .. nova.api. › Laravel\Nova\Http\Controllers\AttachedResourceUpdateController
+  GET|HEAD        nova-api/{resource}/{resourceId}/update-fields ..................................................... nova.api. › Laravel\Nova\Http\Controllers\UpdateFieldController
+  PATCH           nova-api/{resource}/{resourceId}/update-fields ................................................ nova.api. › Laravel\Nova\Http\Controllers\UpdateFieldController@sync
+  GET|HEAD        nova-api/{resource}/{resourceId}/update-pivot-fields/{relatedResource}/{relatedResourceId} .... nova.api. › Laravel\Nova\Http\Controllers\UpdatePivotFieldController
+  PATCH           nova-api/{resource}/{resourceId}/update-pivot-fields/{relatedResource}/{relatedResourceId} nova.api. › Laravel\Nova\Http\Controllers\UpdatePivotFieldController@sync
+  DELETE          nova-api/{resource}/{resourceId}/{relatedResource}/{relatedResourceId}/field/{field} ......... nova.api. › Laravel\Nova\Http\Controllers\PivotFieldDestroyController
+  GET|HEAD        nova-back-navigation ............................................................................................................................................... 
+  GET|HEAD        nova-permissions ................................................................................................................................................... 
+  GET|HEAD        nova-vendor/language-switch/change/{lang} .......................................................................... Badinansoft\LanguageSwitch › LanguageController
+  GET|HEAD        novaspatiepermissions .............................................................................................................................................. 
+  GET|HEAD        panel/email/verify/{id}/{hash} ................................................................................................................. verification.verify
+  GET|HEAD        password/confirm ................................................................................. password.confirm › Auth\ConfirmPasswordController@showConfirmForm
+  POST            password/confirm ............................................................................................................ Auth\ConfirmPasswordController@confirm
+  POST            password/email ................................................................................... password.email › Auth\ForgotPasswordController@sendResetLinkEmail
+  POST            password/login_id ............................................. nova.password.login_id › Laravel\Nova\Http\Controllers\ForgotPasswordController@sendResetLinkLoginId
+  POST            password/login_id_reset ........................................ nova.password.login_id_reset › Laravel\Nova\Http\Controllers\ResetPasswordController@login_id_reset
+  GET|HEAD        password/reset ................................................................................ password.request › Auth\ForgotPasswordController@showLinkRequestForm
+  POST            password/reset ................................................................................................ password.update › Auth\ResetPasswordController@reset
+  GET|HEAD        password/reset/{token} ................................................................................. password.reset › Auth\ResetPasswordController@showResetForm
+  GET|HEAD        register ................................................................................................... register › Auth\RegisterController@showRegistrationForm
+  POST            register .......................................................................................................................... Auth\RegisterController@register
+  GET|HEAD        resources/{resource} ................................................................ nova.pages.index › Laravel\Nova\Http\Controllers\Pages\ResourceIndexController
+  GET|HEAD        resources/{resource}/lens/{lens} .............................................................. nova.pages.lens › Laravel\Nova\Http\Controllers\Pages\LensController
+  GET|HEAD        resources/{resource}/new .......................................................... nova.pages.create › Laravel\Nova\Http\Controllers\Pages\ResourceCreateController
+  GET|HEAD        resources/{resource}/{resourceId} ................................................. nova.pages.detail › Laravel\Nova\Http\Controllers\Pages\ResourceDetailController
+  GET|HEAD        resources/{resource}/{resourceId}/attach/{relatedResource} ............................ nova.pages.attach › Laravel\Nova\Http\Controllers\Pages\AttachableController
+  GET|HEAD        resources/{resource}/{resourceId}/edit .............................................. nova.pages.edit › Laravel\Nova\Http\Controllers\Pages\ResourceUpdateController
+  GET|HEAD        resources/{resource}/{resourceId}/edit-attached/{relatedResource}/{relatedResourceId} nova.pages.edit-attached › Laravel\Nova\Http\Controllers\Pages\AttachedResour…
+  GET|HEAD        resources/{resource}/{resourceId}/replicate ................................. nova.pages.replicate › Laravel\Nova\Http\Controllers\Pages\ResourceReplicateController
+  GET|HEAD        sanctum/csrf-cookie .............................................................................. sanctum.csrf-cookie › Laravel\Sanctum › CsrfCookieController@show
+  GET|HEAD        user-logout ........................................................................................................................................................ 
+
+                                                                                                                                                                  Showing [138] routes
+

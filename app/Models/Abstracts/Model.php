@@ -2,6 +2,7 @@
 
 namespace App\Models\Abstracts;
 
+use App\Models\Scopes\Searchable;
 use App\Traits\TModelTranslation;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,13 +14,54 @@ class Model extends \Illuminate\Database\Eloquent\Model
 {
     use HasFactory;
     use TModelTranslation;
-    // use TModelSoftDeletes;
+    use Searchable;
+
+    /**
+     * The storage format of the model's date columns.
+     *
+     * @var string
+     */
+    // protected $dateFormat = 'Y-m-d h:i:s a';
+    protected $dateFormat;
+
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param array $attributes
+     *
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        // $this->dateFormat = getDefaultDateFormat();
+        parent::__construct($attributes);
+    }
 
     /**
      * @var array
      */
     public static $rules = [];
 
+    /**
+     * @param $key
+     * @param $value
+     *
+     * @return bool|\Illuminate\Support\Collection|int|mixed|string|null
+     */
+    public static function castSingleAttribute($key, $value)
+    {
+        return static::make()->forceFill([ $key => $value ])->castAttribute($key, $value);
+    }
+
+    /**
+     * Get the format for database stored dates.
+     *
+     * @return string
+     */
+    public function getOnlyDateFormat()
+    {
+        return str_before($this->getDateFormat(), " ");
+    }
     /**
      * Handle dynamic method calls into the model.
      *
@@ -116,6 +158,16 @@ class Model extends \Illuminate\Database\Eloquent\Model
             }
         }
 
+        if( ends_with($parsedKey, 'Count') ) {
+            $parsedKeyRelation = str_before($parsedKey, "Count");
+            if( $this->isRelation($parsedKeyRelation) ) {
+                if( $result = $this->$parsedKeyRelation() ) {
+                    return $result->count();
+                }
+
+                return null;
+            }
+        }
         return parent::__get($key);
     }
 
@@ -151,7 +203,7 @@ class Model extends \Illuminate\Database\Eloquent\Model
         return collect($this->toArray())
             ->mapWithKeys(function($value, $key) {
                 return [
-                    static::trans($key) => $this->getFormattedAttribute($key, $value),
+                    static::trans($key) => $this->getFormattedAttribute($key, $value, 'Y-m-d H:i:s.v'),
                 ];
             })
             ->all();
@@ -286,4 +338,13 @@ class Model extends \Illuminate\Database\Eloquent\Model
         return $this;
     }
 
+    public static function existRule($column = 'id'): string
+    {
+        return "exists:" . static::make()->getTable() . ',id';
+    }
+
+    public static function wogs()
+    {
+        return static::withoutGlobalScopes();
+    }
 }

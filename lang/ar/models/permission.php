@@ -1,13 +1,12 @@
 <?php
 
 return [
-    'plural' => 'أذونات',
-    'singular' => 'إذن',
-    'fields' => [
-        'name' => 'اسم',
-        'guard_name' => 'اسم الحارس',
-    ],
-    "names" => [
-
-    ],
+	'role'     => 'صلاحية',
+	'roles'    => 'صلاحيات',
+	'singular' => 'الصلاحية',
+	'plural'   => 'الصلاحيات',
+	'fields'   => [
+		'name'       => 'اسم الصلاحية',
+		'guard_name' => 'اسم الحارس',
+	],
 ];

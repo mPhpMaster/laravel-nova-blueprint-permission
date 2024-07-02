@@ -18,6 +18,14 @@ use Laravel\Nova\Http\Requests\NovaRequest;
  */
 class User extends Resource
 {
+    public static int $priority = 0;
+
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = 'Admin';
     /**
      * The model the resource corresponds to.
      *
@@ -93,10 +101,14 @@ class User extends Resource
                           ])
                  ->withIcons()
                  ->hideFromIndex(),
+//            MorphToMany::make('Roles', 'roles', \Sereny\NovaPermissions\Nova\Role::class),
+//            MorphToMany::make('Permissions', 'permissions', \Sereny\NovaPermissions\Nova\Permission::class),
 
             MorphToMany::make(MODEL::trans('roles'), 'roles', Role::class),
 
             MorphToMany::make(MODEL::trans('permissions'), 'permissions', Permission::class),
+//            MorphToMany::make(Role::trans('plural'), 'roles', \Sereny\NovaPermissions\Nova\Role::class)
+//	            ->showOnIndex(),
         ];
     }
 

@@ -163,7 +163,8 @@ abstract class Resource extends NovaResource
      */
     public static function singularLabel()
     {
-        return static::trans('singular');
+        $name = Str::singular((Str::snake(class_basename(static::class), ' ')));
+        return static::trans($name);
     }
 
     /**
@@ -173,7 +174,8 @@ abstract class Resource extends NovaResource
      */
     public static function label()
     {
-        return static::trans('plural');
+        $name = Str::plural((Str::snake(class_basename(static::class), ' ')));
+        return static::trans($name);
     }
 
     /**

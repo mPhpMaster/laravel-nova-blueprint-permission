@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Facade;
+use Itsmejoshua\Novaspatiepermissions\NovaSpatiePermissionsServiceProvider;
+use Spatie\Permission\PermissionServiceProvider;
 
 !defined('DEV_MODE') && define('DEV_MODE', env('DEV_MODE', false));
 
@@ -71,7 +73,10 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Riyadh',
+    'datetime_format' => 'Y-m-d h:i:s a',
+    'date_format' => 'Y-m-d',
+    'time_format' => 'h:i:s a',
 
     /*
     |--------------------------------------------------------------------------
@@ -84,7 +89,17 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ar',
+
+    'locales' => [
+        'en' => 'English',
+        'ar' => 'العربية',
+    ],
+
+    'available_locales' => [ 'ar' => 'ar', 'en' => 'en' ],
+
+    'perPage' => 10,
+    'per_page' => 15,
 
     /*
     |--------------------------------------------------------------------------
@@ -99,10 +114,6 @@ return [
 
     'fallback_locale' => 'en',
 
-    'locales' => [
-        'en' => 'English',
-        'ar' => 'العربية',
-    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -115,7 +126,7 @@ return [
     |
     */
 
-    'faker_locale' => 'en_US',
+    'faker_locale' => 'ar_SA',
 
     /*
     |--------------------------------------------------------------------------
@@ -193,9 +204,9 @@ return [
          * Package Service Providers...
          */
 
-        App\Providers\NovaServiceProvider::class,
-        Itsmejoshua\Novaspatiepermissions\NovaSpatiePermissionsServiceProvider::class,
-        Spatie\Permission\PermissionServiceProvider::class,
+        // \App\Providers\NovaServiceProvider::class,
+//        NovaSpatiePermissionsServiceProvider::class,
+        PermissionServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -204,6 +215,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\NovaServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
     ],
@@ -221,11 +233,23 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
                                                      // 'ExampleClass' => App\Example\ExampleClass::class,
-                                                     "App\Models\Model" => \App\Models\Abstracts\Model::class,
-                                                     "Model" => \App\Models\Abstracts\Model::class,
                                                  ])->toArray(),
 
     'dev_mode' => DEV_MODE,
 
     'developer' => env('DEVELOPER', null),
+
+    'media_collection_hero_image_name' => env('MEDIA_COLLECTION_HERO_IMAGE_NAME', 'hero_image'),
+
+    'media_collection_multiple_image_name' => env('MEDIA_COLLECTION_MULTIPLE_IMAGE_NAME', 'media_images'),
+    'media_collection_single_image_name'   => env('MEDIA_COLLECTION_SINGLE_IMAGE_NAME', 'media_images'),
+
+    'media_collection_multiple_file_name' => env('MEDIA_COLLECTION_MULTIPLE_FILE_NAME', 'files'),
+    'media_collection_single_file_name'   => env('MEDIA_COLLECTION_SINGLE_FILE_NAME', 'file'),
+
+    'media_collection_thumb'     => 'preview',
+    'media_collection_full-size' => 'full-size',
+
+    'media_collection_name'              => env('MEDIA_COLLECTION_SINGLE_IMAGE_NAME', 'files'),
+    'media_collection_single_page_image' => env('MEDIA_COLLECTION_SINGLE_PAGE_IMAGE', 'page_image'),
 ];

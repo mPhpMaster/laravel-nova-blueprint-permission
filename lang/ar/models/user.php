@@ -1,11 +1,15 @@
 <?php
 
+use App\Interfaces\IRole;
+
 return [
-    'plural' => 'المستخدمين',
-    'singular' => 'المستخدمين',
+	'user'     => 'مستخدم',
+	'users'    => 'مستخدمين',
+	'singular' => 'المستخدم',
+	'plural'   => 'المستخدمين',
     'fields' => [
-        'id' => 'المعرف',
-        'name' => 'الإسم',
+	    'id' => 'م',
+	    'name' => 'الإسم',
         'first_name' => 'الإسم الأول',
         'last_name' => 'الإسم الأخير',
         'email' => 'البريد الإلكتروني',
@@ -23,5 +27,16 @@ return [
         'deleted_at' => 'تاريخ الحذف',
         'created_at' => 'تاريخ الإنشاء',
         'updated_at' => 'تاريخ التحديث',
+        'AVATAR'       => 'الصورة',
+        'phone_number' => 'رقم الجوال',
+        'role'         => 'المنصب',
+        'projects'     => 'المشاريع',
+        'image'        => 'الصورة الرمزية'
     ],
+	'roles' => [
+//		IRole::AdminRole      => 'مدير',
+//		IRole::SupervisorRole => 'مشرف',
+//		IRole::ForemanRole    => 'مراقب عمال',
+//		IRole::EmployeeRole   => 'موظف',
+	]
 ];

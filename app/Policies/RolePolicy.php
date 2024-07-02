@@ -18,6 +18,7 @@ class RolePolicy extends BasePolicy
     // use TDenyEditAttachedPermission, TDenyEditAttachedUser;
 
     public static string $permission_name = 'role';
+	public static bool $super_admin_only = true;
 
     /**
      * @param \App\Models\User                    $user

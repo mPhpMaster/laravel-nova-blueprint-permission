@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
+use Sereny\NovaPermissions\Traits\SupportsRole;
 use Spatie\Permission\Exceptions\RoleAlreadyExists;
 use Spatie\Permission\PermissionRegistrar;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
@@ -23,8 +24,10 @@ class Role extends \Spatie\Permission\Models\Role implements IRole
     use Searchable;
     use SoftDeletes;
     use TModelTranslation;
-    use THasScopeName;
-    use RefreshesPermissionCache;
+	use THasScopeName;
+	use RefreshesPermissionCache;
+	use SupportsRole;
+	use \App\Traits\THasPermissionGroup;
 
     protected $guard_name = 'web';
     protected $fillable = [
@@ -94,4 +97,11 @@ class Role extends \Spatie\Permission\Models\Role implements IRole
     {
         return static::findByName(IRole::SuperAdminRole);
     }
+
+	public function scopeGetAllRoles(Builder $builder, bool $only_names = true, ...$except): Collection
+	{
+		return toCollect(\InConfigParser::roles())
+			->when($only_names, fn($c) => $c->map(fn($a) => data_get(array_wrap($a), 'name')))
+			->reject(fn($a) => $a && in_array($a, array_filter($except)));
+	}
 }
