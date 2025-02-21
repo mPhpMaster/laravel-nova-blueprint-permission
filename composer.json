@@ -1,7 +1,8 @@
 {
+    "$schema": "https://getcomposer.org/schema.json",
     "name": "mphpmaster/laravel-nova-blueprint-permission",
     "type": "project",
-    "description": "Laravel: 9.19 Nova: 4.19 Blueprint: 2.0 With Permissions.",
+    "description": "Laravel: 11 Nova: 5 Blueprint: 2.0 With Permissions.",
     "keywords": [
         "framework",
         "laravel",
@@ -11,34 +12,33 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.1.2",
-        "laravel/framework": "^9.19",
-        "laravel/nova": "~4.0",
-        "guzzlehttp/guzzle": "^7.2",
-        "laravel/helpers": "^1.5",
-        "laravel/sanctum": "^3.0",
-        "laravel/tinker": "^2.7",
-        "acme/analytics": "*",
-        "mphpmaster/laravel-app-helpers": "*",
-        "mphpmaster/laravel-helpers2": "*",
-        "abordage/nova-html-card": "^0.2.1",
-        "ardenthq/nova-image-gallery-field": "^1.0",
-        "badinansoft/nova-language-switch": "^1.0",
-        "itsmejoshua/novaspatiepermissions": "^1.0",
-        "visanduma/nova-back-navigation": "^1.0",
-        "yieldstudio/nova-phone-field": "^1.0"
+        "php": "^8.2",
+        "abordage/nova-total-card": "^1.0",
+        "badinansoft/nova-language-switch": "^3.0",
+        "inertiajs/inertia-laravel": "^2.0",
+        "laravel/breeze": "^2.3",
+        "laravel/framework": "^11.31",
+        "laravel/helpers": "^1.7",
+        "laravel/nova": "^5.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^2.9",
+        "mphpmaster/laravel-app-helpers": "^2.0",
+        "mphpmaster/laravel-helpers2": "^1.2",
+        "sereny/nova-permissions": "^1.7",
+        "tightenco/ziggy": "^2.0",
+        "wdelfuego/nova-datetime": "^2.0"
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^2.12",
-        "beyondcode/laravel-dump-server": "^1.8",
-        "fakerphp/faker": "^1.9.1",
-        "laravel/pint": "^1.0",
-        "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.4",
-        "naoray/blueprint-nova-addon": "^2.0",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
+        "barryvdh/laravel-ide-helper": "^3.5",
+        "beyondcode/laravel-dump-server": "^2.0",
+        "fakerphp/faker": "^1.23",
+        "laravel/pail": "^1.1",
+        "laravel/pint": "^1.13",
+        "laravel/sail": "^1.26",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.1",
+        "pestphp/pest": "^3.7",
+        "pestphp/pest-plugin-laravel": "^3.1"
     },
     "autoload": {
         "psr-4": {
@@ -47,7 +47,8 @@
             "Database\\Seeders\\": "database/seeders/",
             "App\\Services\\": "app/Services/",
             "Helpers\\": "app/Helpers/",
-            "Classes\\": "app/Helpers/Classes/"
+            "Classes\\": "app/Helpers/Classes/",
+            "Packages\\": "Packages/"
         },
         "files": [
             "app/Helpers/Classes/InConfigParser.php",
@@ -56,7 +57,11 @@
             "app/Helpers/Functions/FFiles.php",
             "app/Helpers/Functions/FCurrent.php",
             "app/Helpers/Functions/FTools.php",
-            "app/Helpers/Functions/FNova.php"
+            "app/Helpers/Functions/FNova.php",
+            "app/Helpers/Functions/FPermissions.php",
+            "app/Helpers/Functions/FDebug.php",
+            "app/Helpers/Functions/FRequest.php",
+            "app/Helpers/Functions/FCheck.php"
         ]
     },
     "autoload-dev": {
@@ -79,10 +84,16 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi"
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
         ],
         "helpers": [
-            "[ -f ~/www/fix.sh ] && sh ~/www/fix.sh || exit 0",
+            "[ -f ~/www/fix-plain.sh ] && sh ~/www/fix-plain.sh || exit 0",
             "[ -f ./fix.sh ] && sh ./fix.sh || exit 0"
         ],
         "update-nova-assets": [
@@ -100,32 +111,21 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "repositories": {
         "nova": {
             "type": "path",
             "url": "./nova"
         },
-        "blueprint-nova-addon": {
+        "nova-datetime": {
             "type": "path",
-            "url": "./Packages/blueprint-nova-addon"
-        },
-        "nova-back-navigation": {
-            "type": "path",
-            "url": "./Packages/nova-back-navigation"
-        },
-        "laravel-helpers": {
-            "type": "path",
-            "url": "./Packages/laravel-helpers"
-        },
-        "Analytics": {
-            "type": "path",
-            "url": "./nova-components/Analytics"
+            "url": "./Packages/nova-datetime"
         }
     },
-    "version": "2.0.0"
+    "version": "3.0.0"
 }

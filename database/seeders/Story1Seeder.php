@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Helpers\Classes\InConfigParser;
 use App\Interfaces\IRole;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use InConfigParser;
 
 /**
  *

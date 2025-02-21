@@ -5,6 +5,72 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
+if(!function_exists('isLoggedIn')) {
+	/**
+	 * @param string|null $guard
+	 *
+	 * @return bool
+	 */
+	function isLoggedIn($guard = null): bool
+	{
+		return auth($guard ?? 'web')->check() ?? auth()->check() ?? false;
+	}
+}
+
+if(!function_exists('isNotAnyAdmin')) {
+	/**
+	 * @param \Illuminate\Contracts\Auth\Authenticatable|null $user
+	 *
+	 * @return bool
+	 * @throws \Throwable
+	 */
+	function isNotAnyAdmin(Authenticatable|null $user = null): bool
+	{
+		return !isAnyAdmin($user);
+	}
+}
+
+if(!function_exists('isAnyAdmin')) {
+	/**
+	 * @param \Illuminate\Contracts\Auth\Authenticatable|null $user
+	 *
+	 * @return bool
+	 * @throws \Throwable
+	 */
+	function isAnyAdmin(Authenticatable|null $user = null): bool
+	{
+		// return false;
+		$user = $user ?: currentUser();
+		return $user && (isSuperAdmin($user) || isAdmin($user));
+	}
+}
+
+if(!function_exists('isNotAnyAdminClosure')) {
+	/**
+	 * @param \Illuminate\Contracts\Auth\Authenticatable|null $user
+	 *
+	 * @return \Closure
+	 * @throws \Throwable
+	 */
+	function isNotAnyAdminClosure(Authenticatable|null $user = null): Closure
+	{
+		return fn() => isNotAnyAdmin($user);
+	}
+}
+
+if(!function_exists('isAnyAdminClosure')) {
+	/**
+	 * @param \Illuminate\Contracts\Auth\Authenticatable|null $user
+	 *
+	 * @return \Closure
+	 * @throws \Throwable
+	 */
+	function isAnyAdminClosure(Authenticatable|null $user = null): Closure
+	{
+		return fn() => isAnyAdmin($user);
+	}
+}
+
 if( !function_exists('isAdmin') ) {
     /**
      * @param \Illuminate\Contracts\Auth\Authenticatable|null $user
@@ -190,4 +256,26 @@ if( !function_exists('getModelClass') ) {
 
         return $_model ?? null;
     }
+}
+
+if(!function_exists('isModel')) {
+	/**
+	 * Determine if a given object is inherit Model class.
+	 *
+	 * @param object $object
+	 *
+	 * @return bool
+	 */
+	function isModel($object): bool
+	{
+		try {
+			return (is_object($object) && $object instanceof Model) ||
+				is_subclass_of($object, Model::class) ||
+				is_a($object, Model::class);
+		} catch(Exception $exception) {
+
+		}
+
+		return false;
+	}
 }

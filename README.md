@@ -1,24 +1,31 @@
 ### Laravel ready to go
-- laravel 9.42.2
-- nova 4.24.2 (Silver Surfer)
-- blueprint supports nova
+
+- laravel 11.43.2
+- nova 5.1.5
 
 ### Installation:
+
 Composer command:
+
 ```shell
 composer create-project mphpmaster/laravel-nova-blueprint-permission
 ```
 
 ### Config:
+
 - run fresh setup:
+
 ```shell
 composer install
 php artisan setup -mfs
 ```
+
 - resetup:
+
 ```shell
 php artisan setup --migrate --fresh --seed
 ```
+
 ### Api Status:
 
 * `200` OK

@@ -2,21 +2,17 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\Abstracts\AbstractResource;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-/**
- *
- */
-class Resource extends AbstractResource
+class Resource extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return parent::toArray($request);
     }

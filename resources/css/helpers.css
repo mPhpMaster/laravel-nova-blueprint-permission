@@ -1,0 +1,13 @@
+
+html.dark [dark="yes"],
+html:not(.dark) [dark="no"] {
+    display: block !important;
+}
+html.dark [dark="no"],
+html:not(.dark) [dark="yes"] {
+    display: none !important;
+}
+
+.d-none {
+    display: none !important;
+}

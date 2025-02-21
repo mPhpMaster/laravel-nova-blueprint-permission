@@ -1,10 +1,12 @@
 <?php
 
 return [
+	'user'  => 'مستخدم',
+	'users' => 'مستخدمين',
     'plural' => 'المستخدمين',
     'singular' => 'المستخدمين',
     'fields' => [
-        'id' => 'المعرف',
+	    'id' => 'م',
         'name' => 'الإسم',
         'first_name' => 'الإسم الأول',
         'last_name' => 'الإسم الأخير',
@@ -23,5 +25,17 @@ return [
         'deleted_at' => 'تاريخ الحذف',
         'created_at' => 'تاريخ الإنشاء',
         'updated_at' => 'تاريخ التحديث',
+        'AVATAR'       => 'الصورة',
+        'phone_number' => 'رقم الجوال',
+        'role'         => 'مجموعة الصلاحيات',
+        'projects'     => 'المشاريع',
+        'image'        => 'الصورة الرمزية'
     ],
+	'roles' => [
+//		IRole::AdminRole      => 'مدير',
+//		IRole::SupervisorRole => 'مشرف',
+//		IRole::ForemanRole    => 'مراقب عمال',
+//		IRole::EmployeeRole   => 'موظف',
+	],
+	'user_role' => 'مجموعة صلاحيات: :role'
 ];

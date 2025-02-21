@@ -12,7 +12,16 @@ class Role extends Resource
 {
     use TRoleResource;
 
-    /**
+	public static int $priority = 0;
+
+	/**
+	 * The logical group associated with the resource.
+	 *
+	 * @var string
+	 */
+	public static $group = 'Administration';
+
+	/**
      * The model the resource corresponds to.
      *
      * @var string
@@ -25,6 +34,13 @@ class Role extends Resource
      * @var string
      */
     public static $title = 'name';
+
+	/**
+	 * Indicates if the resource should be globally searchable.
+	 *
+	 * @var bool
+	 */
+	public static $globallySearchable = false;
 
     /**
      * The columns that should be searched.
@@ -40,7 +56,12 @@ class Role extends Resource
      *
      * @var bool
      */
-    public static $displayInNavigation = true;
+	// public static $displayInNavigation = false;
+
+	public function subtitle(): int|string|null
+	{
+		return null;
+	}
 
     /**
      * Get the displayable label of the resource.
@@ -49,7 +70,7 @@ class Role extends Resource
      */
     public static function label()
     {
-        return __('nova-spatie-permissions::lang.Roles');
+		return static::trans('plural');
     }
 
     /**
@@ -59,6 +80,14 @@ class Role extends Resource
      */
     public static function singularLabel()
     {
-        return __('nova-spatie-permissions::lang.Role');
+		return static::trans('singular');
     }
+
+	/**
+	 * @return bool
+	 */
+	public static function isDisplayInNavigation(): bool
+	{
+		return isSuperAdmin() || isAdmin() || self::$displayInNavigation;
+}
 }

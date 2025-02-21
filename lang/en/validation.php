@@ -12,7 +12,9 @@ return [
     | as the size rules. Feel free to tweak each of these messages here.
     |
     */
-
+    'id_about_to_expire' => 'The following employees: :employee, their IDs will expire within a month',
+    'license' => 'The registration of the following cars: :cars, will expire within a month',
+    'periodic_examination' => 'The periodic examination of the following cars: :cars, will expire within a month',
     'accepted' => 'The :attribute must be accepted.',
     'accepted_if' => 'The :attribute must be accepted when :other is :value.',
     'active_url' => 'The :attribute is not a valid URL.',

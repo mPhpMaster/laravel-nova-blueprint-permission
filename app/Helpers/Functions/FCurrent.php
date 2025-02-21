@@ -226,3 +226,15 @@ if( !function_exists('currentModelViaControllerName') ) {
         }
     }
 }
+
+if( !function_exists('canViewAny') ) {
+	/**
+	 * @param $arguments
+	 *
+	 * @return bool
+	 */
+    function canViewAny($arguments = []): bool
+    {
+        return currentUser()?->canViewAny($arguments) ?? false;
+    }
+}

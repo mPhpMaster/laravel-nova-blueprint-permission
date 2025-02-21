@@ -1,7 +1,9 @@
 <?php
 
-use App\Interfaces\IUserType;
+namespace App\Helpers\Classes;
+
 use Carbon\Carbon;
+use App\Interfaces\IHasPermissionGroup;
 
 /**
  * @noinspection PhpIllegalPsrClassPathInspection
@@ -9,43 +11,63 @@ use Carbon\Carbon;
  */
 class InConfigParser
 {
-    public static function permissionOf(string $name, string $group = "system", string $guard_name = "web"): array
+    public static function permissionOf(string|IHasPermissionGroup $name, string|IHasPermissionGroup $group = "system", string $guard_name = "web"): array
     {
+        /** @var string $name */
+        $name = $name instanceof IHasPermissionGroup ? $name::getPermissionGroupName() : (class_exists($name) ? class_basename($name) : $name);
+        /** @var string $group */
+        $group = $group instanceof IHasPermissionGroup ? $group::getPermissionGroupName() : (class_exists($group) ? class_basename($group) : $group);
+
         $guard_name = "web";
-        if( !stringContains($name, '.') ) {
-            return static::permissionsOf($name, $group, $guard_name);
-        }
-        $name = snake_case($name, '-');
+        // if( !stringContains($name, '.') ) {
+        //     return static::permissionsOf($name, $group, $guard_name);
+        // }
+        $name = camel_case($name);
 
         return [ "name" => "{$name}", "group" => "{$group}", "guard_name" => "{$guard_name}" ];
     }
 
-    public static function permissionsOf(string $name, string $group = "system", string $guard_name = "web"): array
+    public static function permissionsOf(string|IHasPermissionGroup $name, string|IHasPermissionGroup $group = "system", string $guard_name = "web"): array
     {
+        /** @var string $name */
+        $name = $name instanceof IHasPermissionGroup ? $name::getPermissionGroupName() : (class_exists($name) ? class_basename($name) : $name);
+        /** @var string $group */
+        $group = $group instanceof IHasPermissionGroup ? $group::getPermissionGroupName() : (class_exists($group) ? class_basename($group) : $group);
+
         $guard_name = "web";
-        if( stringContains($name, '.') ) {
-            return [ static::permissionOf($name, $group, $guard_name) ];
-        }
-        $name = snake_case($name, '-');
+        // if( stringContains($name, '.') ) {
+        //     return [ static::permissionOf($name, $group, $guard_name) ];
+        // }
+
+        $name = studly_case($name);
+
         return [
-            [ "name" => "{$name}.index", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
-            [ "name" => "{$name}.view_any", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
-            [ "name" => "{$name}.view", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
-            [ "name" => "{$name}.create", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
-            [ "name" => "{$name}.edit", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
-            [ "name" => "{$name}.delete", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
-            [ "name" => "{$name}.restore", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
-            [ "name" => "{$name}.force_delete", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
+            // [ "name" => "index{$name}", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
+            [ "name" => "viewAny{$name}", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
+            [ "name" => "view{$name}", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
+            [ "name" => "create{$name}", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
+            [ "name" => "edit{$name}", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
+            [ "name" => "delete{$name}", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
+            [ "name" => "restore{$name}", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
+            [ "name" => "forceDelete{$name}", "group" => "{$group}", "guard_name" => "{$guard_name}" ],
         ];
     }
 
-    public static function roleOf(string $name, string $group = "system", string $guard_name = "web"): array
+    public static function roles(): array
     {
+        return collect(array_wrap(config('permission.roles')))
+            ->unique(fn($value) => array_values($value), true)
+            ->all();
+    }
+
+    public static function roleOf(
+        string $name, string $group = "system", string $guard_name = "web"
+    ): array {
         $guard_name = "web";
 
         return compact('name', 'group', 'guard_name');
     }
-
+    /*
     public static function userOf(
         string $name,
         ?string $password = null,
@@ -62,5 +84,5 @@ class InConfigParser
                            'email',
                            'email_verified_at',
                        ]);
-    }
+        }*/
 }

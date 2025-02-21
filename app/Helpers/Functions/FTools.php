@@ -925,3 +925,28 @@ if( !function_exists('isCurrentAction') ) {
     }
 }
 
+if(!function_exists('fakeCarPlate')) {
+	/**
+	 * @param string|null $locale
+	 * @param int|array   $numbers_count
+	 * @param int|array   $letters_count
+	 * @param string      $between_letters
+	 * @param string      $between
+	 *
+	 * @return string
+	 * @throws \Random\RandomException
+	 */
+	function fakeCarPlate(string|null $locale = null, int|array $numbers_count = 4, int|array $letters_count = [
+		3,
+		4,
+	], string                         $between_letters = ' ', string $between = ' '): string
+	{
+		$locale ??= config('app.faker_locale', 'ar_SA');
+		return fake($locale)->numerify(str_repeat('#', is_array($numbers_count) ? random_int(...$numbers_count) : $numbers_count)).
+			$between.
+			collect()
+				->times(is_array($letters_count) ? random_int(...$letters_count) : $letters_count)
+				->map(fn() => mb_substr(fake($locale)->name(), 0, 1))
+				->implode($between_letters ?: '');
+	}
+}

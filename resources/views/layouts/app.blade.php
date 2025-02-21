@@ -18,6 +18,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @vite(['resources/js/app.js'])
 </head>
 <body>
     <div id="app">
@@ -40,7 +41,7 @@
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
                         @guest
-                            @if (Route::has('login'))
+                            @if (Route::has('nova.login'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('nova.login') }}">{{ __('Login') }}</a>
                                 </li>

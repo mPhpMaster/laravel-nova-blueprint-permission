@@ -2,189 +2,219 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Nova\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
+use Laravel\Fortify\Features;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Menu\Menu;
 use Laravel\Nova\Menu\MenuItem;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
 
-/**
- *
- */
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
+	public static function bootMenu(?ServiceProvider $provider = null)
+	{
+		Nova::enableRTL(fn() => $provider->app->getLocale() === 'ar' || currentLocale() === 'ar');
+		Nova::withBreadcrumbs(fn() => auth()->check());
+		Nova::sortResourcesBy(function($resource) {
+			return $resource::$priority ?? 9999;
+		});
 
-        // Nova::withBreadcrumbs();
-        // Nova::withoutThemeSwitcher();
-        Nova::serving(function(ServingNova $event) {
-            Nova::translations(lang_path("vendor/nova/" . app()->getLocale() . ".json"));
-        });
+//		if($provider->app->getLocale() === 'ar') {
+//			Nova::enableRTL();
+//		}
 
-        static::bootMenu($this);
-        static::bootUserMenu($this);
-        static::bootFooter($this);
+		// Nova::mainMenu(fn(Request $request) => [
+		//     MenuSection::dashboard(Main::class)->icon('chart-bar'),
+		//
+		//     MenuSeparator::make(),
+		//
+		//     MenuGroup::make(
+		//         __('Administration'),
+		//         [
+		//             MenuSection::make(
+		//                 __('User Management'),
+		//                 [
+		//                     MenuItem::resource(User::class),
+		//                     MenuItem::link(__('nova-spatie-permissions::lang.sidebar_label_roles'), 'resources/roles'),
+		//                     MenuItem::link(__('nova-spatie-permissions::lang.sidebar_label_permissions'), 'resources/permissions'),
+		//                 ]
+		//             )->icon('users')->collapsable(),
+		//         ]
+		//     )->collapsable(),
+		//
+		// ]);
+	}
 
-        // Nova::enableRTL();
-    }
+	public static function bootUserMenu(?ServiceProvider $provider = null)
+	{
+		Nova::userMenu(function(Request $request, Menu $menu) {
+			if($request->user()) {
+				$menu->prepend(
+					MenuItem::make(
+						__('Profile'),
+						UserProfile::getResourceUrl(getNovaRequest(), $request->user(), '', 'edit'),
+					),
+				);
+			}
 
-    /**
-     * Register the Nova routes.
-     *
-     * @return void
-     */
-    protected function routes()
-    {
-        Nova::routes()
-            ->withAuthenticationRoutes()
-            ->withPasswordResetRoutes()
-            ->register();
-    }
+			return $menu;
+		});
+	}
 
-    /**
-     * Register the Nova gate.
-     *
-     * This gate determines who can access Nova in non-local environments.
-     *
-     * @return void
-     */
-    protected function gate()
-    {
-        Gate::define('viewNova', function($user) {
-            return isDeveloperMode() || in_array($user->email, [
-                    'admin@app.com',
-                ]);
-        });
-    }
+	public static function bootFooter(?ServiceProvider $provider = null)
+	{
+		Nova::footer(function($request) {
+			$devMode = '';
+			if(isDeveloperMode()) {
+				$devMode = "<span class='text-green-600'>DevMode</span>";
+				$devMode .= " <span class='text-primary-800'>(".getDeveloper().')</span>';
+			}
+			$devMode = $devMode ? "{$devMode}" : '';
 
-    /**
-     * Get the dashboards that should be listed in the Nova sidebar.
-     *
-     * @return array
-     */
-    protected function dashboards()
-    {
-        return [
-            new \App\Nova\Dashboards\Main,
-        ];
-    }
+			$version = '';
+			if(\File::exists($composerPath = base_path('composer.json'))) {
+				try {
+					$version = "<span class='text-xxs'> v";
+					$version .= data_get(json_decode(\File::get($composerPath), true) ?: [], 'version');
+					$version .= '</span>';
+				} catch(\Exception|\Error $exception) {
+				}
+			}
+			$version = $devMode ? " - {$version}" : $version;
 
-    /**
-     * Get the tools that should be listed in the Nova sidebar.
-     *
-     * @return array
-     */
-    public function tools()
-    {
-        return [
-            new \Badinansoft\LanguageSwitch\LanguageSwitch(),
+			return Blade::render("<div class='text-xxs'>@env('local') {$devMode} @endenv {$version}</div>");
+		});
 
-            new \Visanduma\NovaBackNavigation\NovaBackNavigation(),
+		// \Laravel\Nova\Nova::footer(function($request) {
+		//     return Blade::render(
+		//         '
+		//     @env(\'local\')
+		//         This is Local!
+		//     @endenv
+		//     @env(\'prod\')
+		//         This is Production!
+		//     @endenv
+		// '
+		//     );
+		// });
+	}
 
-            // \Itsmejoshua\Novaspatiepermissions\Novaspatiepermissions::make(),
-        ];
-    }
+	/**
+	 * Bootstrap any application services.
+	 */
+	public function boot(): void
+	{
+		parent::boot();
 
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
+		Password::defaults(Password::min(3));
+		$this->loadTranslationsFrom(__DIR__.'/../lang/nova-spatie-permissions', 'nova-spatie-permissions');
 
-    public static function bootMenu(?ServiceProvider $provider = null)
-    {
-        if( $provider->app->getLocale() === 'ar' ) {
-            Nova::enableRTL();
-        }
+		// Nova::withBreadcrumbs();
+		// Nova::withoutThemeSwitcher();
+		Nova::serving(function(ServingNova $event) {
+			Nova::translations(lang_path("vendor/nova/".app()->getLocale().".json"));
+			// loading custom files
+			// Nova::script('js-helpers', resource_path("js/helpers.js"));
+			// Nova::style('css-helpers', resource_path("css/helpers.css"));
+		});
 
-        // Nova::mainMenu(fn(Request $request) => [
-        //     MenuSection::dashboard(Main::class)->icon('chart-bar'),
-        //
-        //     MenuSeparator::make(),
-        //
-        //     MenuGroup::make(
-        //         __('Administration'),
-        //         [
-        //             MenuSection::make(
-        //                 __('User Management'),
-        //                 [
-        //                     MenuItem::resource(User::class),
-        //                     MenuItem::link(__('nova-spatie-permissions::lang.sidebar_label_roles'), 'resources/roles'),
-        //                     MenuItem::link(__('nova-spatie-permissions::lang.sidebar_label_permissions'), 'resources/permissions'),
-        //                 ]
-        //             )->icon('users')->collapsable(),
-        //         ]
-        //     )->collapsable(),
-        //
-        // ]);
-    }
+		static::bootMenu($this);
+		static::bootUserMenu($this);
+		static::bootFooter($this);
 
-    public static function bootUserMenu(?ServiceProvider $provider = null)
-    {
-        Nova::userMenu(function(Request $request, Menu $menu) {
-            if( $request->user() ) {
-                $menu->prepend(
-                    MenuItem::make(
-                        __('Profile'),
-                        "/resources/users/{$request->user()->getKey()}/edit"
-                    )
-                );
-            }
+		// Nova::enableRTL();
 
-            return $menu;
-        });
-    }
+		Nova::resourcesIn(app_path("Nova"));
+		Nova::notificationPollingInterval(5);
+	}
 
-    public static function bootFooter(?ServiceProvider $provider = null)
-    {
-        Nova::footer(function($request) {
-            $devMode = "";
-            if( isDeveloperMode() ) {
-                $devMode = "<span class='text-green-600'>DevMode</span>";
-                $devMode .= " <span class='text-primary-800'>(" . getDeveloper() . ")</span>";
-            }
-            $devMode = $devMode ? "{$devMode}" : "";
+	/**
+	 * Get the tools that should be listed in the Nova sidebar.
+	 *
+	 * @return array<int, \Laravel\Nova\Tool>
+	 */
+	public function tools(): array
+	{
+		return [
+			\Badinansoft\LanguageSwitch\LanguageSwitch::make(),
 
-            $version = "";
-            if( \File::exists($composerPath = base_path('composer.json')) ) {
-                try {
-                    $version = "<span class='text-xxs'> v";
-                    $version .= data_get(json_decode(\File::get($composerPath), true) ?: [], "version");
-                    $version .= "</span>";
-                } catch(\Exception|\Error $exception) {
-                }
-            }
-            $version = $devMode ? " - {$version}" : $version;
+			\Packages\NovaPermissions\NovaPermissions::make(),
 
-            return Blade::render("<div class='text-xxs'>@env('local') {$devMode} @endenv {$version}</div>");
-        });
+			//			(new \Sereny\NovaPermissions\NovaPermissions())
+			//				->disableMenu()
+			//			->disablePermissions()
+			//				->canSee(function($request) {
+			//					return $request->user()->isSuperAdmin();
+			//				}),
+		];
+	}
 
-        // \Laravel\Nova\Nova::footer(function($request) {
-        //     return Blade::render(
-        //         '
-        //     @env(\'local\')
-        //         This is Local!
-        //     @endenv
-        //     @env(\'prod\')
-        //         This is Production!
-        //     @endenv
-        // '
-        //     );
-        // });
-    }
+	/**
+	 * Register any application services.
+	 */
+	public function register(): void
+	{
+		parent::register();
+
+		//
+	}
+
+	/**
+	 * Register the configurations for Laravel Fortify.
+	 */
+	protected function fortify(): void
+	{
+		Nova::fortify()
+			->features([
+				Features::updatePasswords(),
+				Features::emailVerification(),
+				Features::twoFactorAuthentication([ 'confirm' => true, 'confirmPassword' => true ]),
+			])
+			->register();
+	}
+
+	/**
+	 * Register the Nova routes.
+	 */
+	protected function routes(): void
+	{
+		Nova::routes()
+			->withAuthenticationRoutes(default: true)
+			->withPasswordResetRoutes()
+//			->withoutEmailVerificationRoutes()
+			->register();
+	}
+
+	/**
+	 * Register the Nova gate.
+	 *
+	 * This gate determines who can access Nova in non-local environments.
+	 */
+	protected function gate(): void
+	{
+		Gate::define('viewNova', function(User $user) {
+			return isDeveloperMode() || in_array($user->email, [
+					'admin@app.com',
+				]) || $user?->isAnyAdmin();
+		});
+	}
+
+	/**
+	 * Get the dashboards that should be listed in the Nova sidebar.
+	 *
+	 * @return array<int, \Laravel\Nova\Dashboard>
+	 */
+	protected function dashboards(): array
+	{
+		return [
+			new \App\Nova\Dashboards\Main,
+		];
+	}
 }

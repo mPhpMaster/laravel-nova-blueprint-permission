@@ -1,9 +1,6 @@
 <?php
 
 namespace App\Interfaces;
-
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-
 /**
  *
  */
@@ -12,21 +9,9 @@ interface IRole
     /**
      *
      */
-    const SuperAdminRole = "Super Admin";
+    const SuperAdminRole = "super-admin";
     /**
      *
      */
-    const AdminRole = "Admin";
-    /**
-     *
-     */
-    const ProjectManagerRole = "Project Manager";
-    /**
-     *
-     */
-    const SettlementAndReconciliationRole = "Settlement And Reconciliation";
-    /**
-     *
-     */
-    const MerchantRole = "Merchant";
+    const AdminRole = "admin";
 }

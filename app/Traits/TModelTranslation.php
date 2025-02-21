@@ -72,6 +72,43 @@ trait TModelTranslation
         }
         $result ??= value($default);
 
+        if( $result === $key ) {
+            $result = $result === 'plural' ? str_plural($model) : ($result === 'singular' ? str_singular($model) : $result);
+            $result = \Str::headline($result);
+        }
+
         return $result;
+    }
+
+    public static function fieldTrans($key = null, $replace = [], $locale = null, $default = null)
+    {
+        $trans = collect(static::trans('fields', $replace, $locale, $default));
+        $trans->each(function($v, $k) use ($trans) {
+            $k = str($k);
+            foreach( array_filter([
+                                      $k->toString(),
+                                      $k->camel()->toString(),
+                                      $k->snake()->toString(),
+                                      $k->snake()->upper()->toString(),
+                                      $k->snake()->lower()->toString(),
+                                      $k->studly()->toString(),
+                                      $k->title()->toString(),
+                                      $k->headline()->toString(),
+                                      $k->slug()->toString(),
+                                      $k->snake('-')->toString(),
+                                      $k->snake('-')->upper()->toString(),
+                                      $k->snake('-')->lower()->toString(),
+                                  ]) as $item ) {
+                $trans->put($item, $v);
+            }
+        });
+        $default = is_null($default) ? static::trans(...func_get_args()) : $default;
+
+        return $trans->has($key) ? $trans->get($key) : value($default);
+    }
+
+    public static function generateValidationRequiredMessages(array $validations): array
+    {
+        return generateValidationRequiredMessages($validations, [ static::class, 'fieldTrans' ]);
     }
 }

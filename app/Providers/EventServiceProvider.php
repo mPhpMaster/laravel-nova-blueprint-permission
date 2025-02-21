@@ -3,15 +3,9 @@
 namespace App\Providers;
 
 use App\Events\RequestVerification;
-use App\Models\Group;
-use App\Models\PaymentGatewayList;
-use App\Models\PaymentMethod;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
-use App\Observers\GroupObserver;
-use App\Observers\PaymentGatewayListObserver;
-use App\Observers\PaymentMethodObserver;
 use App\Observers\PermissionObserver;
 use App\Observers\RoleObserver;
 use App\Observers\UserObserver;

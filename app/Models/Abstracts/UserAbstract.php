@@ -12,20 +12,23 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Support\Facades\Hash;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 
 /**
- * @mixin IdeHelperUserAbstract
+ *
  */
 class UserAbstract extends \App\Models\Abstracts\Model implements
     AuthenticatableContract,
     AuthorizableContract,
     CanResetPasswordContract,
-    \Illuminate\Contracts\Auth\MustVerifyEmail,
+//    \Illuminate\Contracts\Auth\MustVerifyEmail,
     HasLocalePreference,
     IUserType
 {
     use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
     use THasUserType;
+    use TwoFactorAuthenticatable;
 
     /**
      * @param $value
@@ -34,7 +37,7 @@ class UserAbstract extends \App\Models\Abstracts\Model implements
      */
     public function setPasswordAttribute($value)
     {
-        $this->attributes[ 'password' ] = \Hash::needsRehash($value) ? \Hash::make($value) : $value;
+        $this->attributes[ 'password' ] = Hash::needsRehash($value) ? Hash::make($value) : $value;
     }
 
     /**

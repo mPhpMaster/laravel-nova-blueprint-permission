@@ -5,6 +5,7 @@ use Laravel\Nova\Http\Middleware\Authenticate;
 use Laravel\Nova\Http\Middleware\Authorize;
 use Laravel\Nova\Http\Middleware\BootTools;
 use Laravel\Nova\Http\Middleware\DispatchServingNovaEvent;
+// use Laravel\Nova\Http\Middleware\EnsureEmailIsVerified;
 use Laravel\Nova\Http\Middleware\HandleInertiaRequests;
 
 return [
@@ -59,7 +60,7 @@ return [
     |
     */
 
-    'path' => '/panel',
+    'path' => '/',
 
     /*
     |--------------------------------------------------------------------------
@@ -103,12 +104,12 @@ return [
         HandleInertiaRequests::class,
         DispatchServingNovaEvent::class,
         BootTools::class,
-        \Itsmejoshua\Novaspatiepermissions\ForgetCachedPermissions::class,
     ],
 
     'api_middleware' => [
         'nova',
         Authenticate::class,
+        // EnsureEmailIsVerified::class,
         Authorize::class,
     ],
 
@@ -124,6 +125,7 @@ return [
     */
 
     'pagination' => 'links',
+//    'pagination' => 'simple',
 
     /*
     |--------------------------------------------------------------------------
@@ -150,6 +152,7 @@ return [
     */
 
     'currency' => 'SAR',
+//    'currency' => 'USD',
 
     /*
     |--------------------------------------------------------------------------
@@ -166,11 +169,11 @@ return [
     'brand' => [
         'logo' => resource_path('/images/underz-icon.svg'),
 
-        'colors' => [
-            "400" => "24, 182, 155, 0.5",
-            "500" => "24, 182, 155",
-            "600" => "24, 182, 155, 0.75",
-        ]
+//        'colors' => [
+//            "400" => "24, 182, 155, 0.5",
+//            "500" => "24, 182, 155",
+//            "600" => "24, 182, 155, 0.75",
+//        ]
     ],
 
     /*
@@ -187,4 +190,21 @@ return [
     'actions' => [
         'resource' => ActionResource::class,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Nova Impersonation Redirection URLs
+    |--------------------------------------------------------------------------
+    |
+    | This configuration option allows you to specify a URL where Nova should
+    | redirect an administrator after impersonating another user and a URL
+    | to redirect the administrator after stopping impersonating a user.
+    |
+    */
+
+    'impersonation' => [
+        'started' => '/',
+        'stopped' => '/',
+    ],
+
 ];

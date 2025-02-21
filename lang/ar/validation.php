@@ -12,6 +12,9 @@ return [
     | as the size rules. Feel free to tweak each of these messages here.
     |
     */
+    'id_about_to_expire' => 'الموظفين التالية اسماؤهم: :employee، ستنتهي هوياتهم خلال شهر',
+    'license' => 'استمارات السيارات التالية: :cars، ستنتهي خلال شهر',
+    'periodic_examination' => 'الفحص الدوري للسيارات التالية: :cars سينتهي خلال شهر',
     'accepted' => 'يجب قبول :attribute',
     'accepted_if' => 'يجب قبول :attribute عندما الآخر هو :value.',
     'active_url' => ':attribute لا يُمثّل رابطًا صحيحًا',

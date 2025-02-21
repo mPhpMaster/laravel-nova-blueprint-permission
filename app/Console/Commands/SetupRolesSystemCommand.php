@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Permission;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Console\Command;
 
 /**
@@ -45,6 +46,8 @@ class SetupRolesSystemCommand extends Command
      */
     public function handle()
     {
+		// forMe: register permissions by models names
+	    $this->call('db:seed', [ '--class' => RolesAndPermissionsSeeder::class ]);
         $this->call('permission:cache-reset');
 
         $permissions = toCollect(config('permission.permissions', []))

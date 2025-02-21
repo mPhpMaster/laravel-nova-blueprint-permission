@@ -36,7 +36,7 @@ class BasePolicy
      */
     public function viewAny(?Authenticatable $user = null)
     {
-        return static::userCan("view_any", $user) || $this->index($user);
+		return static::userCan('viewAny', $user) || static::superPermission($user) || $this->index($user);
     }
 
     /**
@@ -48,7 +48,7 @@ class BasePolicy
      */
     public function index(?Authenticatable $user)
     {
-        return static::userCan("index", $user);
+		return static::userCan('index', $user) || static::superPermission($user);
     }
 
     /**
@@ -61,7 +61,7 @@ class BasePolicy
      */
     public function view(?User $user, Model $model)
     {
-        return static::userCan("view", $user);
+		return static::userCan('view', $user) || static::superPermission($user);
     }
 
     /**
@@ -73,7 +73,7 @@ class BasePolicy
      */
     public function create(User $user)
     {
-        return static::userCan("create", $user);
+		return static::userCan('create', $user) || static::superPermission($user);
     }
 
     /**
@@ -86,7 +86,7 @@ class BasePolicy
      */
     public function update(User $user, Model $model)
     {
-        return static::userCan("edit", $user);
+		return static::userCan('edit', $user) || static::superPermission($user);
     }
 
     /**
@@ -99,7 +99,7 @@ class BasePolicy
      */
     public function delete(User $user, Model $model)
     {
-        return static::userCan("delete", $user);
+		return static::userCan('delete', $user) || static::superPermission($user);
     }
 
     /**
@@ -112,7 +112,7 @@ class BasePolicy
      */
     public function restore(User $user, Model $model)
     {
-        return static::userCan("restore", $user);
+		return static::userCan('restore', $user) || static::superPermission($user);
     }
 
     /**
@@ -125,7 +125,7 @@ class BasePolicy
      */
     public function forceDelete(User $user, Model $model)
     {
-        return isDeveloper('alsafadi') || static::userCan("force_delete", $user);
+        return static::userCan('forceDelete', $user) || static::superPermission($user);
     }
 
     /**
@@ -141,7 +141,8 @@ class BasePolicy
      */
     public static function getPermissionName(): ?string
     {
-        return static::$permission_name ?? snake_case(str_singular(str_before_last_count(class_basename(static::class), 'Policy')));
+		return static::$permission_name ??
+			studly_case(str_before_last_count(class_basename(static::class), 'Policy'));
     }
 
     public static function getFullPermissionName(string $permission): ?string
@@ -152,7 +153,7 @@ class BasePolicy
             return $permission;
         }
 
-        return "{$permission_name}.$permission";
+		return "{$permission}{$permission_name}";
     }
 
     public static function userCan(string $permission, ?User $user = null): bool
@@ -181,7 +182,7 @@ class BasePolicy
     public function canAttach(Authenticatable $user, \Illuminate\Database\Eloquent\Model $role, \Illuminate\Database\Eloquent\Model $permission)
     {
         $fromMethod = data_get(last(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)), 'function');
-        $relationFromMethod = $fromMethod ? str_after($fromMethod, "attach") : null;
+		$relationFromMethod = $fromMethod ? str_after($fromMethod, 'attach') : null;
         if( $relationFromMethod ) {
             $relationFromMethodPlural = str_plural(camel_case($relationFromMethod));
             if( $role->$relationFromMethodPlural->contains($permission->getKeyName(), $permission->getKey()) ) {
@@ -193,4 +194,16 @@ class BasePolicy
 
         return true;
     }
+
+	/**
+	 * @param \Illuminate\Contracts\Auth\Authenticatable|null $user
+	 *
+	 * @return bool
+	 */
+	public static function superPermission(?Authenticatable $user)
+	{
+		$user ??= currentUser();
+
+		return $user?->isAnyAdmin();
+	}
 }

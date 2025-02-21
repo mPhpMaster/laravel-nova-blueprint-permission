@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Interfaces\IUserType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -12,25 +13,29 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
+	/**
+	 * The name of the factory's corresponding model.
+	 *
+	 * @var class-string<\Illuminate\Database\Eloquent\Model|\Model>
+	 */
+	protected $model = User::class;
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var class-string<\Illuminate\Database\Eloquent\Model|\Model>
+     * The current password being used by the factory.
      */
-    protected $model = User::class;
+    protected static ?string $password;
 
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'name' => fake()->firstName(),
             'email' => $email = fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => \Hash::make($email),
+            'password' => static::$password ??= Hash::make($email),
             'remember_token' => Str::random(10),
             // 'user_type' => fake()->randomElement([ IUserType::NORMAL, IUserType::SUB_USER, IUserType::MERCHANT, IUserType::MERCHANT_SUB_USER ]),
         ];
@@ -38,45 +43,43 @@ class UserFactory extends Factory
 
     /**
      * Indicate that the model's email address should be unverified.
-     *
-     * @return static
      */
-    public function unverified()
+    public function unverified(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
 
-    /**
-     * @return static
-     */
-    // public function normal()
-    // {
-    //     return $this->state(fn(array $attributes) => [ 'user_type' => IUserType::NORMAL ]);
-    // }
+	/**
+	 * @return static
+	 */
+	// public function normal()
+	// {
+	//     return $this->state(fn(array $attributes) => [ 'user_type' => IUserType::NORMAL ]);
+	// }
 
-    /**
-     * @return static
-     */
-    // public function subUser()
-    // {
-    //     return $this->state(fn(array $attributes) => [ 'user_type' => IUserType::SUB_USER ]);
-    // }
+	/**
+	 * @return static
+	 */
+	// public function subUser()
+	// {
+	//     return $this->state(fn(array $attributes) => [ 'user_type' => IUserType::SUB_USER ]);
+	// }
 
-    /**
-     * @return static
-     */
-    // public function merchant()
-    // {
-    //     return $this->state(fn(array $attributes) => [ 'user_type' => IUserType::MERCHANT ]);
-    // }
+	/**
+	 * @return static
+	 */
+	// public function merchant()
+	// {
+	//     return $this->state(fn(array $attributes) => [ 'user_type' => IUserType::MERCHANT ]);
+	// }
 
-    /**
-     * @return static
-     */
-    // public function merchantSubUser()
-    // {
-    //     return $this->state(fn(array $attributes) => [ 'user_type' => IUserType::MERCHANT_SUB_USER ]);
-    // }
+	/**
+	 * @return static
+	 */
+	// public function merchantSubUser()
+	// {
+	//     return $this->state(fn(array $attributes) => [ 'user_type' => IUserType::MERCHANT_SUB_USER ]);
+	// }
 }

@@ -1,8 +1,12 @@
 <?php
 
+use App\Interfaces\IRole;
+
 return [
-    'plural' => 'Users',
-    'singular' => 'User',
+	'singular' => $singular = 'User',
+	'plural'   => $plural = 'Users',
+	'user'     => $singular,
+	'users'    => $plural,
     'fields' => [
         'id' => 'ID',
         'name' => 'Full Name',
@@ -23,5 +27,16 @@ return [
         'deleted_at' => 'Deleted At',
         'created_at' => 'Created At',
         'updated_at' => 'Updated At',
+        'AVATAR'       => 'AVATAR',
+        'phone_number' => 'Phone Number',
+        'role'         => 'Role',
+        'projects'     => 'Projects',
+        'image'        => 'Avatar'
     ],
+	'roles' => [
+//		IRole::AdminRole      => 'Admin',
+//		IRole::SupervisorRole => 'Supervisor',
+//		IRole::ForemanRole    => 'Foreman',
+//		IRole::EmployeeRole   => 'Employee',
+	]
 ];
