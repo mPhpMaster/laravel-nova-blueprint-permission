@@ -2,7 +2,7 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "mphpmaster/laravel-nova-blueprint-permission",
     "type": "project",
-    "description": "Laravel: 11 Nova: 5 Blueprint: 2.0 With Permissions.",
+    "description": "Laravel: 11 Nova: 5 With Permissions.",
     "keywords": [
         "framework",
         "laravel",
